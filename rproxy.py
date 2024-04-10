@@ -25,7 +25,7 @@ def handle_client(client_socket : socket.socket) -> None:
     :type client_socket: socket.socket
     :return: None
     """
-    # TODO: Change from hard-coded to round-robin load balancing
+    # TODO: Change from hard-coded to round-robin load balancing.
     backend_address = BACKEND_SERVERS[0]
 
     backend_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -67,6 +67,7 @@ def start_proxy():
         proxy_thread.start()
 
 if __name__ == '__main__':
+    # TODO: Write parser to read server pool from cfg file.
     # Run the proxy server with root privileges
     if os.geteuid() != 0:
         print("Please run this script as root")
