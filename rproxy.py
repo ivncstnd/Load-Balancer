@@ -3,6 +3,8 @@ import sys
 import socket
 import threading
 
+enable_debug = True
+
 # Define this proxy server's listening address and port
 PROXY_HOST = '0.0.0.0'  # Listen on all available network interfaces
 PROXY_PORT = 80
@@ -31,18 +33,28 @@ def handle_client(client_socket : socket.socket) -> None:
     backend_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     backend_socket.connect(backend_address)
 
-    client_data = client_socket.recv(4096)
+    client_request = client_socket.recv(4096)
 
-    backend_socket.sendall(client_data)
+     # Debug
+    if enable_debug:
+        print(f'[Debug] Recieved request from client:')
+        print(client_request.decode())
+
+    backend_socket.sendall(client_request)
     
-    backend_data = backend_socket.recv(4096)
+    backend_response = backend_socket.recv(4096)
     
-    client_socket.sendall(backend_data)
+    # Debug
+    if enable_debug:
+        print(f'[Debug] Recieved response from backend:')
+        print(backend_response.decode())
+
+    client_socket.sendall(backend_response)
 
     client_socket.close()
     backend_socket.close()
 
-def start_proxy():
+def start_proxy() -> None:
     """
     Start the reverse proxy server listening loop.
     
